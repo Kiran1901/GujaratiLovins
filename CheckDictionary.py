@@ -11,13 +11,13 @@ class fastDictSearch():
         index = [word for word in f.readlines()]
         f.close()
         index.sort()
-        f = open("list2.txt", "a", encoding="UTF-16")
+        f = open(self.Dict, "w", encoding="UTF-16")
         for word in index:
             f.write(word)
         f.close()
 
     def make_index(self):
-        f = open("list2.txt", "r", encoding="UTF-16")
+        f = open(self.Dict, "r", encoding="UTF-16")
         word = f.readline()[:-1]
         while word:
             st = re.search("^\w?\W?", word)
@@ -25,7 +25,6 @@ class fastDictSearch():
             if key not in self.index:
                 self.index[key] = f.tell()
             word = f.readline()[:-1]
-        self.Dict="list2.txt"
         f.close()
 
 class CheckDictionary(fastDictSearch):
@@ -50,19 +49,24 @@ class CheckDictionary(fastDictSearch):
             loc = self.index[word[:2]]
 
 
-            f = open(self.Dict,"r",encoding='utf-16')
+            f = open(self.Dict,"r",encoding='UTF-16')
             f.seek(loc)
             suff=[]
             line = f.readline()
             while(line):
-                if(word[0]!=line[0]):
+                if(word[:2]!=line[:2]):
                     break
                 else:
                     r = re.search(word,line)
-                    if r is not None and r.end()<len(line)-1:
-                        suff = line[r.end():-1]
-                        check=1
-                        print("word: "+line+" Mathced "+line[:r.end()]+" suff: "+suff)
+                    if r is not None:
+                        Check = 1
+                        if(r.end()<=len(line)-1):
+                            suff = line[r.end():-1]
+                            if(len(suff)==0):
+                                print("word: ",word," RoOt")
+                                break
+                            matched = line[:r.end()]
+                            print("word: " + word + " line: " + line + " Matched " + matched + " suff: " + suff)
                 line=f.readline()
             f.close()
 

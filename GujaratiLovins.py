@@ -74,7 +74,7 @@ def remove_ending(word):
     return word
 
 
-list = open("input.txt","r",encoding="utf-8-sig").read().split()
+list = open("input.txt","r",encoding="UTF-16").read().split()
 dictionary = CheckDictionary()
 stopword = Checkstopword()
 #dictionary.sort_dict()
@@ -95,9 +95,12 @@ for word in list:
     if word.endswith("."):
         word = word.replace(".", "")
 
-    if (stopword.Checkstopword(word) == False):
-        if (dictionary.CheckDictionary(word) == True):
-            print(word + "    root")
-        # else:
-            # print("Not Found")
-            # print(remove_ending(word))
+    # if (stopword.Checkstopword(word) == False):
+    #     if (dictionary.CheckDictionary(word) == True):
+    #         print("----------------------------------")
+    #     else:
+    #         print("Not Found in Dict")
+    #         print(remove_ending(word))
+
+    if (dictionary.CheckDictionary(word) == True):
+        print("----------------------------------")
