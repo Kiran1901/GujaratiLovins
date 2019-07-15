@@ -52,20 +52,20 @@ class CheckDictionary(fastDictSearch):
             f = open(self.Dict,"r",encoding='UTF-16')
             f.seek(loc)
             suff=[]
-            line = f.readline()
+            line = f.readline()[:-1]
             while(line):
                 if(word[:2]!=line[:2]):
                     break
                 else:
-                    r = re.search(word,line)
+                    r = re.search(line,word)
                     if r is not None:
                         Check = 1
-                        if(r.end()<=len(line)-1):
-                            suff = line[r.end():-1]
+                        if(r.end()<=len(word)-1):
+                            suff = word[r.end():]
                             if(len(suff)==0):
                                 print("word: ",word," RoOt")
                                 break
-                            matched = line[:r.end()]
+                            matched = word[:r.end()]
                             print("word: " + word + " line: " + line + " Matched " + matched + " suff: " + suff)
                 line=f.readline()
             f.close()
@@ -74,7 +74,4 @@ class CheckDictionary(fastDictSearch):
             return True
         else :
             return False
-
-
-
 
