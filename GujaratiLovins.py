@@ -68,7 +68,7 @@ def remove_ending(word):
             if cond:
                 base = word[:length - el]
                 if cond(base):
-                    print(word + "\t\t" + ending, end="     ")
+                    #print(word + "\t\t" + ending, end="     ")
                     return base
         el -= 1
     return word
@@ -77,8 +77,8 @@ def remove_ending(word):
 list = open("input.txt","r",encoding="UTF-16").read().split()
 dictionary = CheckDictionary()
 stopword = Checkstopword()
-#dictionary.sort_dict()
-dictionary.make_index()
+#dictionary.sort_dict()                     #function to sort dictionary
+dictionary.make_index()                         #function to make index for FastSearch
 
 for word in list:
 
@@ -95,12 +95,23 @@ for word in list:
     if word.endswith("."):
         word = word.replace(".", "")
 
-    # if (stopword.Checkstopword(word) == False):
-    #     if (dictionary.CheckDictionary(word) == True):
-    #         print("----------------------------------")
-    #     else:
-    #         print("Not Found in Dict")
-    #         print(remove_ending(word))
+    outNotFound = open("NotFoundList.csv","a+",encoding="UTF_16")
 
-    if (dictionary.CheckDictionary(word) == True):
-        print("----------------------------------")
+    if (stopword.Checkstopword(word) == False):
+        if (dictionary.CheckDictionary(word) == True):         #searches word in dictionary
+            print("Found: "+word)           #Word is found in dictionary either full or partial
+
+        else:
+            print("Not Found: "+word)                     #Word is not present in dictionary full or partially
+
+                            # Stemming with rules
+
+            stemmed = remove_ending(word)              #Stems word according lovin's rules defined above
+            ending = word[len(stemmed):]
+            #print("Not Found "+stemmed+" "+ending)
+            if(len(ending)>0):                          #checks if suffix is present or not
+                outNotFound.write(word + "," + stemmed + "," + ending + "\n")       #ending is suffix
+            else:
+                outNotFound.write(word + "," + stemmed + "," + "root" + "\n")       #no suffix, root word
+
+    outNotFound.close()
